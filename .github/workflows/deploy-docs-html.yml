@@ -1,0 +1,24 @@
+name: Deploy Docs HTML
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      subdomain: ${{ steps.vars.outputs.subdomain }}
+    steps:
+      - name: Derive subdomain
+        id: vars
+        run: echo "subdomain=$(echo ${{ github.event.repository.name }} | sed 's/-docs$//')" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: prepare
+    uses: cathe-org/actions/.github/workflows/deploy-docs.yml@main
+    with:
+      subdomain: ${{ needs.prepare.outputs.subdomain }}
+      source: "./**"
+      site: ${{ vars.SITE }}
+    secrets: inherit
