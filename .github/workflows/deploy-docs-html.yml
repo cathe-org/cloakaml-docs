@@ -20,4 +20,5 @@ jobs:
     with:
       subdomain: ${{ needs.prepare.outputs.subdomain }}
       site: ${{ vars.SITE }}
+      org: cathe-org
     secrets: inherit
